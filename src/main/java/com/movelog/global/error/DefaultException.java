@@ -1,7 +1,7 @@
 package com.movelog.global.error;
 
 
-import com.example.ai_tutor.global.payload.ErrorCode;
+import com.movelog.global.payload.ErrorCode;
 import lombok.Getter;
 
 @Getter
