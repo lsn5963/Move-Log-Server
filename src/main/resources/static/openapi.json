@@ -13,11 +13,14 @@
   ],
   "tags": [
     {
-      "name" : "Auth",
+      "name": "Auth",
       "description": "로그인, 회원가입, 로그아웃과 관련된 API"
+    },
+    {
+      "name": "Write",
+      "description": "기록 생성과 관련된 API"
     }
   ],
-
   "paths": {
     "/auth": {
       "post": {
@@ -56,6 +59,44 @@
           }
         }
       }
+    },
+    "/write": {
+      "post": {
+        "tags": ["Write"],
+        "summary": "기록 생성",
+        "description": "기록 생성을 수행합니다.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "기록 생성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "기록 생성 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -63,14 +104,14 @@
       "SignInReq": {
         "type": "object",
         "properties": {
-            "email": {
-                "type": "string",
-                "description": "이메일"
-                },
-            "providerId": {
-              "type": "string",
-              "description": "구글 로그인 시 제공되는 providerId"
-            }
+          "email": {
+            "type": "string",
+            "description": "이메일"
+          },
+          "providerId": {
+            "type": "string",
+            "description": "구글 로그인 시 제공되는 providerId"
+          }
         },
         "required": ["token"]
       },
