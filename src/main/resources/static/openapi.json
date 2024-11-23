@@ -19,7 +19,16 @@
     {
       "name": "Write",
       "description": "기록 생성과 관련된 API"
+    },
+    {
+      "name": "PersonalStatistics",
+      "description": "사용자 통계와 관련된 API"
+    },
+    {
+      "name": "AllStatistics",
+      "description": "전체 사용자 통계와 관련된 API"
     }
+
   ],
   "paths": {
     "/auth": {
@@ -69,7 +78,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SignInReq"
+                "$ref": "#/components/schemas/CreateWriteReq"
               }
             }
           }
@@ -97,6 +106,253 @@
           }
         }
       }
+    },
+    "/PersonalStatistics": {
+      "get": {
+        "tags": ["PersonalStatistics"],
+        "summary": "사용자 개인 기록 통계 조회",
+        "description": "사용자의 개인 기록에 대한 통계 정보를 조회합니다.",
+        "responses": {
+          "200": {
+            "description": "개인 통계 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveMyRecordRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "개인 통계 조회 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/PersonalStatistics/calendar/{date}": {
+      "get": {
+        "tags": ["PersonalStatistics"],
+        "summary": "사용자 개인 기록 캘린더 조회",
+        "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "description": "조회할 날짜 (YYYY-MM 형식)",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2024-11"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "통계 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveMyCalendarRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "조회 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/totalTop5/{verb}": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "누적 top5 단어별 기록 생성 건수 조회",
+        "description": "전체 기간 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
+        "parameters": [
+          {
+            "name": "verb",
+            "in": "path",
+            "required": true,
+            "description": "했어요 0, 갔어요 1, 먹었어요 2",
+            "schema": {
+              "type": "integer",
+              "format": "integer",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveTotalTop5ListRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/dailyTop5": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "일간 top5 단어별 기록 생성 건수 조회",
+        "description": "오늘 하루 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
+        "parameters": [
+          {
+            "name": "verb",
+            "in": "path",
+            "required": true,
+            "description": "했어요 0, 갔어요 1, 먹었어요 2",
+            "schema": {
+              "type": "integer",
+              "format": "integer",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveDailyTop5ListRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/weeklyTop5": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "주간 top5 단어별 기록 생성 건수 조회",
+        "description": "이번 주의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
+        "parameters": [
+          {
+            "name": "verb",
+            "in": "path",
+            "required": true,
+            "description": "했어요 0, 갔어요 1, 먹었어요 2",
+            "schema": {
+              "type": "integer",
+              "format": "integer",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveWeeklyTop5ListRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/monthlyTop5": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "월간 top5 단어별 기록 생성 건수 조회",
+        "description": "이번 달의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
+        "parameters": [
+          {
+            "name": "verb",
+            "in": "path",
+            "required": true,
+            "description": "했어요 0, 갔어요 1, 먹었어요 2",
+            "schema": {
+              "type": "integer",
+              "format": "integer",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveMonthlyTop5ListRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/record": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "전체 기록 통계 조회",
+        "description": "전체 기록 통계 조회를 합니다.",
+        "responses": {
+          "200": {
+            "description": "조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveAllRecordRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/AllStatistics/calendar": {
+      "get": {
+        "tags": ["AllStatistics"],
+        "summary": "전체 사용자 기록 캘린더 조회",
+        "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
+        "responses": {
+          "200": {
+            "description": "통계 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetrieveAllCalendarRes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "조회 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -114,6 +370,158 @@
           }
         },
         "required": ["token"]
+      },
+      "CreateWriteReq": {
+        "type": "object",
+        "properties": {
+          "verbType": {
+            "type": "integer",
+            "description": "했어요 0, 먹었어요 1, 갔어요 2",
+            "example": 0
+          },
+          "noun": {
+            "type": "string",
+            "description": "명사",
+            "example": "헬스"
+          },
+          "record_image": {
+            "type": "string",
+            "description": "기록 이미지",
+            "example": "#$!~@#!@#!@213123"
+          }
+        }
+      },
+      "RetrieveMyRecordRes": {
+        "properties": {
+          "recordNum": {
+            "type": "integer",
+            "description": "기록 생성 건수",
+            "example": 2
+          },
+          "bestRecord": {
+            "type": "string",
+            "description": "최고 연속 기록",
+            "example": 30
+          },
+          "averageRecord": {
+            "type": "number",
+            "description": "평균 일간 기록",
+            "example": 3.3
+          },
+          "dailyRecord": {
+            "type": "integer",
+            "description": "일일 최다 기록",
+            "example": 2
+          }
+        }
+      },
+      "RetrieveMyCalendarRes": {
+        "properties": {
+          "myRecordDate": {
+            "type": "string",
+            "description": "기록 생성 날짜",
+            "example": "2024-11-23"
+          },
+          "numRecord": {
+            "type": "integer",
+            "description": "일자별 기록 개수",
+            "example": 5
+          }
+        }
+      },
+      "RetrieveAllRecordRes": {
+        "properties": {
+          "recordNum": {
+            "type": "integer",
+            "description": "총 기록 생성 건수",
+            "example": 2
+          },
+          "bestRecord": {
+            "type": "string",
+            "description": "최고 연속 기록",
+            "example": 30
+          },
+          "averageRecord": {
+            "type": "number",
+            "description": "평균 일간 기록",
+            "example": 3.3
+          },
+          "dailyRecord": {
+            "type": "integer",
+            "description": "일일 최다 기록",
+            "example": 2
+          }
+        }
+      },
+      "RetrieveTotalTop5ListRes": {
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "단어",
+            "example": "공부"
+          },
+          "recordNum": {
+            "type": "integer",
+            "description": "기록 생성 건수",
+            "example": 15
+          }
+        }
+      },
+      "RetrieveDailyTop5ListRes": {
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "단어",
+            "example": "공부"
+          },
+          "recordNum": {
+            "type": "integer",
+            "description": "기록 생성 건수",
+            "example": 15
+          }
+        }
+      },
+      "RetrieveWeeklyTop5ListRes": {
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "단어",
+            "example": "공부"
+          },
+          "recordNum": {
+            "type": "integer",
+            "description": "기록 생성 건수",
+            "example": 15
+          }
+        }
+      },
+      "RetrieveMonthlyTop5ListRes": {
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "단어",
+            "example": "공부"
+          },
+          "recordNum": {
+            "type": "integer",
+            "description": "기록 생성 건수",
+            "example": 15
+          }
+        }
+      },
+      "RetrieveAllCalendarRes": {
+        "properties": {
+          "myRecordDate": {
+            "type": "string",
+            "description": "기록 생성 날짜",
+            "example": "2024-11-23"
+          },
+          "numRecord": {
+            "type": "integer",
+            "description": "일자별 기록 개수",
+            "example": 5
+          }
+        }
       },
       "Message": {
         "type": "object",
