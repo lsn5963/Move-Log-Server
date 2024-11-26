@@ -21,11 +21,11 @@
       "description": "기록 생성과 관련된 API"
     },
     {
-      "name": "PersonalStatistics",
+      "name": "personalstat",
       "description": "사용자 통계와 관련된 API"
     },
     {
-      "name": "AllStatistics",
+      "name": "allstat",
       "description": "전체 사용자 통계와 관련된 API"
     }
 
@@ -107,9 +107,9 @@
         }
       }
     },
-    "/PersonalStatistics": {
+    "/personalstat": {
       "get": {
-        "tags": ["PersonalStatistics"],
+        "tags": ["personalstat"],
         "summary": "사용자 개인 기록 통계 조회",
         "description": "사용자의 개인 기록에 대한 통계 정보를 조회합니다.",
         "responses": {
@@ -136,9 +136,9 @@
         }
       }
     },
-    "/PersonalStatistics/calendar/{date}": {
+    "/personalstat/calendar/{date}": {
       "get": {
-        "tags": ["PersonalStatistics"],
+        "tags": ["personalstat"],
         "summary": "사용자 개인 기록 캘린더 조회",
         "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
         "parameters": [
@@ -178,9 +178,9 @@
         }
       }
     },
-    "/AllStatistics/totalTop5/{verb}": {
+    "/allstat/totalTop5/{verb}": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "누적 top5 단어별 기록 생성 건수 조회",
         "description": "전체 기간 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -210,9 +210,9 @@
         }
       }
     },
-    "/AllStatistics/dailyTop5": {
+    "/allstat/dailyTop5": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "일간 top5 단어별 기록 생성 건수 조회",
         "description": "오늘 하루 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -242,9 +242,9 @@
         }
       }
     },
-    "/AllStatistics/weeklyTop5": {
+    "/allstat/weeklyTop5": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "주간 top5 단어별 기록 생성 건수 조회",
         "description": "이번 주의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -274,9 +274,9 @@
         }
       }
     },
-    "/AllStatistics/monthlyTop5": {
+    "/allstat/monthlyTop5": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "월간 top5 단어별 기록 생성 건수 조회",
         "description": "이번 달의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -306,9 +306,9 @@
         }
       }
     },
-    "/AllStatistics/record": {
+    "/allstat/record": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "전체 기록 통계 조회",
         "description": "전체 기록 통계 조회를 합니다.",
         "responses": {
@@ -325,9 +325,9 @@
         }
       }
     },
-    "/AllStatistics/calendar": {
+    "/allstat/calendar": {
       "get": {
-        "tags": ["AllStatistics"],
+        "tags": ["allstat"],
         "summary": "전체 사용자 기록 캘린더 조회",
         "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
         "responses": {
