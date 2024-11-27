@@ -21,11 +21,11 @@
       "description": "기록 생성과 관련된 API"
     },
     {
-      "name": "personalstat",
+      "name": "personal-stat",
       "description": "사용자 통계와 관련된 API"
     },
     {
-      "name": "allstat",
+      "name": "all-stat",
       "description": "전체 사용자 통계와 관련된 API"
     }
 
@@ -69,20 +69,33 @@
         }
       }
     },
-    "/write": {
-      "post": {
-        "tags": ["Write"],
-        "summary": "기록 생성",
-        "description": "기록 생성을 수행합니다.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateWriteReq"
+  "/write": {
+    "post": {
+      "tags": ["Write"],
+      "summary": "기록 생성",
+      "description": "기록 생성을 수행합니다.",
+      "requestBody": {
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "CreateWriteReq": {
+                  "$ref": "#/components/schemas/CreateWriteReq"
+                },
+                "imgs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "description": "이미지 파일 목록"
+                }
               }
             }
           }
-        },
+        }
+      },
         "responses": {
           "200": {
             "description": "기록 생성 성공",
@@ -107,9 +120,9 @@
         }
       }
     },
-    "/personalstat": {
+    "/personal-stat": {
       "get": {
-        "tags": ["personalstat"],
+        "tags": ["personal-stat"],
         "summary": "사용자 개인 기록 통계 조회",
         "description": "사용자의 개인 기록에 대한 통계 정보를 조회합니다.",
         "responses": {
@@ -136,9 +149,9 @@
         }
       }
     },
-    "/personalstat/calendar/{date}": {
+    "/personal-stat/calendar/{date}": {
       "get": {
-        "tags": ["personalstat"],
+        "tags": ["personal-stat"],
         "summary": "사용자 개인 기록 캘린더 조회",
         "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
         "parameters": [
@@ -178,9 +191,9 @@
         }
       }
     },
-    "/allstat/totalTop5/{verb}": {
+    "/all-stat/total-top5/{verb}": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "누적 top5 단어별 기록 생성 건수 조회",
         "description": "전체 기간 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -210,9 +223,9 @@
         }
       }
     },
-    "/allstat/dailyTop5": {
+    "/all-stat/daily-top5": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "일간 top5 단어별 기록 생성 건수 조회",
         "description": "오늘 하루 동안의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -242,9 +255,9 @@
         }
       }
     },
-    "/allstat/weeklyTop5": {
+    "/all-stat/weekly-top5": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "주간 top5 단어별 기록 생성 건수 조회",
         "description": "이번 주의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -274,9 +287,9 @@
         }
       }
     },
-    "/allstat/monthlyTop5": {
+    "/all-stat/monthly-top5": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "월간 top5 단어별 기록 생성 건수 조회",
         "description": "이번 달의 상위 5개 단어와 각각의 기록 건수를 조회합니다.",
         "parameters": [
@@ -306,9 +319,9 @@
         }
       }
     },
-    "/allstat/record": {
+    "/all-stat/record": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "전체 기록 통계 조회",
         "description": "전체 기록 통계 조회를 합니다.",
         "responses": {
@@ -325,9 +338,9 @@
         }
       }
     },
-    "/allstat/calendar": {
+    "/all-stat/calendar": {
       "get": {
-        "tags": ["allstat"],
+        "tags": ["all-stat"],
         "summary": "전체 사용자 기록 캘린더 조회",
         "description": "사용자의 운동 기록에 대한 통계 정보를 조회합니다.",
         "responses": {
@@ -383,11 +396,6 @@
             "type": "string",
             "description": "명사",
             "example": "헬스"
-          },
-          "record_image": {
-            "type": "string",
-            "description": "기록 이미지",
-            "example": "#$!~@#!@#!@213123"
           }
         }
       },
