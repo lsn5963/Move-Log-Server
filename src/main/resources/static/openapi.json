@@ -13,7 +13,7 @@
   ],
   "tags": [
     {
-      "name" : "예시.Auth",
+      "name" : "Auth",
       "description": "로그인, 회원가입, 로그아웃과 관련된 API"
     },
     {
@@ -30,7 +30,7 @@
     "/auth": {
       "post": {
         "tags": [
-          "에시.Auth"
+          "Auth"
         ],
         "summary": "구글 로그인",
         "description": "구글 로그인을 수행합니다.",
@@ -721,6 +721,7 @@
           },
           "lastRecord": {
             "type": "string",
+            "example": "2021-09-01 00:00:00",
             "description": "마지막 기록 일시"
           }
         }
@@ -743,8 +744,9 @@
               "description": "단어 기록 횟수"
             },
             "lastRecord": {
-                "type": "string",
-                "description": "마지막 기록 일시"
+              "type": "string",
+              "example": "2021-09-01 00:00:00",
+              "description": "마지막 기록 일시"
             },
             "DayRecordAvg": {
                 "type": "integer",
