@@ -466,7 +466,7 @@
         }
       }
     },
-    "/news/record/recommend": {
+    "/news/recommend": {
       "post": {
         "tags": [
           "News"
