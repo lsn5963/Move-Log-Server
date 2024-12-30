@@ -1,4 +1,5 @@
-package com.movelog.global.error;
+package com.movelog.global.exception;
+
 
 import com.movelog.global.payload.ErrorCode;
 import lombok.Getter;
