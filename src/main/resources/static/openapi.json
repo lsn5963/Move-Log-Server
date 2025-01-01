@@ -39,7 +39,7 @@
 
   ],
   "paths": {
-    "/auth": {
+    "/auth/login": {
       "post": {
         "tags": ["Auth"],
         "summary": "카카오 로그인",
@@ -67,6 +67,47 @@
           },
           "400": {
             "description": "로그인 실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth": {
+      "delete": {
+        "tags": ["Auth"],
+        "summary": "회원 탈퇴",
+        "description": "해당 유저의 가입을 탈퇴합니다.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Bearer 액세스 토큰을 입력하세요.",
+            "schema": {
+              "type": "string",
+              "example": "Bearer {accessToken}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "회원 탈퇴 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "회원 탈퇴 실패",
             "content": {
               "application/json": {
                 "schema": {
