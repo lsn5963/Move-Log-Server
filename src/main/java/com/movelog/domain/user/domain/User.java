@@ -49,4 +49,8 @@ public class User extends BaseEntity {
         this.providerId = providerId;
         this.isRegistered = false;
     }
+
+    public void updateIsRegistered() {
+        this.isRegistered = true;
+    }
 }

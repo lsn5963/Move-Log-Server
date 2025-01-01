@@ -58,4 +58,9 @@ public class AuthService {
                 .message("회원 탈퇴에 성공 했습니다.")
                 .build();
     }
+    @Transactional
+    public void changeIsRegistered(Long id) {
+        User user = userRepository.findById(id).get();
+        user.updateIsRegistered();
+    }
 }
