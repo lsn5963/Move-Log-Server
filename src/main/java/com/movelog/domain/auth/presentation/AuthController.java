@@ -24,7 +24,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Tag(name = "Authorization", description = "Authorization API")
 @RestController
@@ -59,7 +62,7 @@ public class AuthController {
         String email = authService.findEmail(providerId);
 
         String accessToken = jwtUtil.createJwt("access", providerId, "ROLE_USER", 3600000L, email);
-
+        System.out.println("accessToken = " + accessToken);
         User user = userRepository.findByProviderId(providerId)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -70,6 +73,17 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok(authRes);
+    }
+    @Operation(summary = "회원 가입", description = "회원가입을 진행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AuthRes.class)))}),
+            @ApiResponse(responseCode = "400", description = "로그인 실패", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))}),
+    })
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signUp(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        authService.changeIsRegistered(userPrincipal.getId());
+
+        return ResponseEntity.ok().build();
     }
 
 
@@ -84,4 +98,5 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(authService.unlinkAccount(userPrincipal.getId()));
     }
+
 }
