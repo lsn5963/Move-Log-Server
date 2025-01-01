@@ -42,30 +42,31 @@
     "/auth": {
       "post": {
         "tags": ["Auth"],
-        "summary": "구글 로그인",
-        "description": "구글 로그인을 수행합니다.",
+        "summary": "카카오 로그인",
+        "description": "카카오 로그인을 수행합니다. ID 토큰과 provider 정보를 전달받아 인증을 처리합니다.",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SignInReq"
+                "$ref": "#/components/schemas/IdTokenReq"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "구글 로그인 성공",
+            "description": "카카오 로그인 성공",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Message"
+                  "$ref": "#/components/schemas/AuthRes"
                 }
               }
             }
           },
           "400": {
-            "description": "생성 실패",
+            "description": "로그인 실패",
             "content": {
               "application/json": {
                 "schema": {
@@ -800,105 +801,106 @@
   },
   "components": {
     "schemas": {
-      "SignInReq": {
+      "IdTokenReq": {
         "type": "object",
         "properties": {
-          "email": {
+          "idToken": {
             "type": "string",
-            "description": "이메일"
+            "description": "카카오에서 발급된 ID 토큰"
           },
-          "providerId": {
+          "provider": {
             "type": "string",
-            "description": "구글 로그인 시 제공되는 providerId"
+            "description": "'kakao'를 입력해야 합니다.",
+            "example": "kakao"
           }
         },
-        "required": ["token"]
-      },
-      "CreateWriteReq": {
-        "type": "object",
-        "properties": {
-          "verbType": {
-            "type": "integer",
-            "description": "했어요 0, 먹었어요 1, 갔어요 2",
-            "example": 0
-          },
-          "noun": {
-            "type": "string",
-            "description": "명사",
-            "example": "헬스"
-          },
-          "record_image": {
-            "type": "string",
-            "description": "기록 이미지",
-            "example": "#$!~@#!@#!@213123"
-          }
+        "required": ["idToken", "provider"]
+    },
+    "CreateWriteReq": {
+      "type": "object",
+      "properties": {
+        "verbType": {
+          "type": "integer",
+          "description": "했어요 0, 먹었어요 1, 갔어요 2",
+          "example": 0
+        },
+        "noun": {
+          "type": "string",
+          "description": "명사",
+          "example": "헬스"
+        },
+        "record_image": {
+          "type": "string",
+          "description": "기록 이미지",
+          "example": "#$!~@#!@#!@213123"
         }
-      },
-      "RetrieveMyRecordRes": {
-        "properties": {
-          "recordNum": {
-            "type": "integer",
-            "description": "기록 생성 건수",
-            "example": 2
-          },
-          "bestRecord": {
-            "type": "string",
-            "description": "최고 연속 기록",
-            "example": 30
-          },
-          "averageRecord": {
-            "type": "number",
-            "description": "평균 일간 기록",
-            "example": 3.3
-          },
-          "dailyRecord": {
-            "type": "integer",
-            "description": "일일 최다 기록",
-            "example": 2
-          }
+      }
+    },
+    "RetrieveMyRecordRes": {
+      "properties": {
+        "recordNum": {
+          "type": "integer",
+          "description": "기록 생성 건수",
+          "example": 2
+        },
+        "bestRecord": {
+          "type": "string",
+          "description": "최고 연속 기록",
+          "example": 30
+        },
+        "averageRecord": {
+          "type": "number",
+          "description": "평균 일간 기록",
+          "example": 3.3
+        },
+        "dailyRecord": {
+          "type": "integer",
+          "description": "일일 최다 기록",
+          "example": 2
         }
-      },
-      "RetrieveMyCalendarRes": {
-        "properties": {
-          "myRecordDate": {
-            "type": "string",
-            "description": "기록 생성 날짜",
-            "example": "2024-11-23"
-          },
-          "numRecord": {
-            "type": "integer",
-            "description": "일자별 기록 개수",
-            "example": 5
-          }
+      }
+    },
+    "RetrieveMyCalendarRes": {
+      "properties": {
+        "myRecordDate": {
+          "type": "string",
+          "description": "기록 생성 날짜",
+          "example": "2024-11-23"
+        },
+        "numRecord": {
+          "type": "integer",
+          "description": "일자별 기록 개수",
+          "example": 5
         }
-      },
-      "RetrieveAllRecordRes": {
-        "properties": {
-          "recordNum": {
-            "type": "integer",
-            "description": "총 기록 생성 건수",
-            "example": 2
-          },
-          "bestRecord": {
-            "type": "string",
-            "description": "최고 연속 기록",
-            "example": 30
-          },
-          "averageRecord": {
-            "type": "number",
-            "description": "평균 일간 기록",
-            "example": 3.3
-          },
-          "dailyRecord": {
-            "type": "integer",
-            "description": "일일 최다 기록",
-            "example": 2
-          }
+      }
+    },
+    "RetrieveAllRecordRes": {
+      "properties": {
+        "recordNum": {
+          "type": "integer",
+          "description": "총 기록 생성 건수",
+          "example": 2
+        },
+        "bestRecord": {
+          "type": "string",
+          "description": "최고 연속 기록",
+          "example": 30
+        },
+        "averageRecord": {
+          "type": "number",
+          "description": "평균 일간 기록",
+          "example": 3.3
+        },
+        "dailyRecord": {
+          "type": "integer",
+          "description": "일일 최다 기록",
+          "example": 2
         }
-      },
-      "RetrieveTotalTop5ListRes": {
-        "properties": {
-          "word": {
+      }
+    },
+    "RetrieveTotalTop5ListRes": {
+      "properties": {
+        "word": {
             "type": "string",
             "description": "단어",
             "example": "공부"
@@ -1232,6 +1234,19 @@
           "status": {
             "type": "integer",
             "description": "HTTP 상태 코드"
+          }
+        }
+      },
+      "AuthRes": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "'Bearer' 토큰으로 사용되는 액세스 토큰"
+          },
+          "isRegistered": {
+            "type": "boolean",
+            "description": "사용자가 등록되었는지 여부를 나타냅니다"
           }
         }
       }
