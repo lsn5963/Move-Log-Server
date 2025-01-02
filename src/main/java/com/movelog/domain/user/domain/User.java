@@ -3,6 +3,7 @@ package com.movelog.domain.user.domain;
 
 import com.movelog.domain.common.BaseEntity;
 
+import com.movelog.domain.record.domain.Record;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,6 +38,9 @@ public class User extends BaseEntity {
     private boolean isRegistered;
 
     private String fcmToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records = new ArrayList<>();
 
 
     @Builder

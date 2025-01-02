@@ -20,11 +20,11 @@ public class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-//    @Enumerated(value = EnumType.STRING)
-//    @Column(name = "status")
-//    private Status status = Status.ACTIVE;
-//
-//    public void updateStatus(Status status) {
-//        this.status = status;
-//    }
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.ACTIVE;
+
+    public void updateStatus(Status status) {
+        this.status = status;
+    }
 }
