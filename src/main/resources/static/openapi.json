@@ -17,7 +17,7 @@
       "description": "로그인, 회원가입, 로그아웃과 관련된 API"
     },
     {
-      "name": "Write",
+      "name": "Record",
       "description": "기록 생성과 관련된 API"
     },
     {
@@ -119,16 +119,16 @@
         }
       }
     },
-    "/write": {
+    "/record": {
       "post": {
-        "tags": ["Write"],
+        "tags": ["Record"],
         "summary": "기록 생성",
         "description": "기록 생성을 수행합니다.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateWriteReq"
+                "$ref": "#/components/schemas/CreateRecordReq"
               }
             }
           }
@@ -857,7 +857,7 @@
         },
         "required": ["idToken", "provider"]
     },
-    "CreateWriteReq": {
+    "CreateRecordReq": {
       "type": "object",
       "properties": {
         "verbType": {
