@@ -54,6 +54,10 @@ dependencies {
         implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
     }
 
+    // GPT
+    implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+
+
     // Amazon S3
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
     implementation 'com.amazonaws:aws-java-sdk-s3'
@@ -61,6 +65,11 @@ dependencies {
 
     implementation 'org.projectlombok:lombok:1.18.28'
 
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation "io.netty:netty-all:4.1.68.Final"
+    implementation "io.netty:netty-resolver-dns-native-macos:4.1.68.Final"
+    implementation "io.projectreactor.netty:reactor-netty-core:1.1.0"
+    implementation "io.projectreactor.netty:reactor-netty-http:1.1.0"
 
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
