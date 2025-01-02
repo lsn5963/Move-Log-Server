@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080/api/v1",
+      "url": "http://52.78.107.187:8080/api/v1",
       "description": "일거수일투족 spring 서버"
     }
   ],
