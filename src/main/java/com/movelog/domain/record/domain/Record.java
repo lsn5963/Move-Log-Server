@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import org.joda.time.LocalDateTime;
 
 @Entity
-@Table(name = "Record")
+@Table(name = "record")
 @NoArgsConstructor
 @Getter
 public class Record extends BaseEntity {
@@ -27,9 +27,8 @@ public class Record extends BaseEntity {
     @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 
-    @Enumerated(value = EnumType.STRING)
     @Column(name = "verb_type")
-    private VerbType recordType;
+    private Long verbType;
 
     @Column(name = "record_image")
     private String recordImage;
@@ -38,10 +37,10 @@ public class Record extends BaseEntity {
     private LocalDateTime actionTime;
 
     @Builder
-    public Record(User user, Keyword keyword, VerbType recordType, String recordImage) {
+    public Record(User user, Keyword keyword, Long verbType, String recordImage) {
         this.user = user;
         this.keyword = keyword;
-        this.recordType = recordType;
+        this.verbType = verbType;
         this.recordImage = recordImage;
         this.actionTime = actionTime == null? LocalDateTime.now():actionTime;
     }
