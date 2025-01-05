@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDateTime;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "record")
@@ -34,7 +35,7 @@ public class Record extends BaseEntity {
     private String recordImage;
 
     @Column(name = "action_time")
-    private LocalDateTime actionTime;
+    private java.time.LocalDateTime actionTime;
 
     @Builder
     public Record(User user, Keyword keyword, Long verbType, String recordImage) {
