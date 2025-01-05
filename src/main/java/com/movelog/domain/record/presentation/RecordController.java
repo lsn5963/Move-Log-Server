@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -32,6 +29,19 @@ public class RecordController {
         ApiResponse result = ApiResponse.builder()
                 .check(true)
                 .information("기록을 추가했어요")
+                .build();
+        return ResponseEntity.ok(result);
+    }
+    @Operation(summary = "오늘 기준 기록 현황 API", description = "오늘 기준 기록 확인하는 API입니다.")
+    @GetMapping("/today")
+    public ResponseEntity<ApiResponse> retrieveTodayRecord(
+            @Parameter(description = "User의 토큰을 입력해주세요.", required = true) @AuthenticationPrincipal UserPrincipal userPrincipal
+//            @Parameter(description = "Schemas의 CreateRecordReq를 참고해주세요.", required = true) @RequestPart CreateRecordReq createRecordReq,
+            ) {;
+
+        ApiResponse result = ApiResponse.builder()
+                .check(true)
+                .information(recordService.retrieveTodayRecord(userPrincipal.getId()))
                 .build();
         return ResponseEntity.ok(result);
     }

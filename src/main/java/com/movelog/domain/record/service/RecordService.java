@@ -14,8 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +46,7 @@ public class RecordService {
                 .keyword(keyword)
                 .verbType(createRecordReq.getVerbType())
                 .recordImage(recordImgUrl)
+//                .actionTime(LocalDateTime.now())
                 .build();
 
         recordRepository.save(record);
@@ -50,5 +55,23 @@ public class RecordService {
         Optional<User> userOptional = userRepository.findById(userId);
         DefaultAssert.isOptionalPresent(userOptional);
         return userOptional.get();
+    }
+
+    public List<Long> retrieveTodayRecord(Long userId) {
+        User user = validUserById(userId);
+        // 현재 날짜 가져오기
+        LocalDate today = LocalDate.now(); // 오늘 날짜 (2025-01-05 기준)
+
+        // 오늘의 시작 시간과 끝 시간 계산
+        LocalDateTime startOfDay = today.atStartOfDay(); // 2025-01-05T00:00:00
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX); // 2025-01-05T23:59:59.999999999
+
+        // 레코드 조회
+        List<Record> records = recordRepository.findByUserAndActionTimeBetween(user, startOfDay, endOfDay);
+
+        return records.stream()
+                .map(Record::getVerbType) // Record 객체에서 verbType 추출
+                .distinct()              // 중복 제거
+                .collect(Collectors.toList());
     }
 }
