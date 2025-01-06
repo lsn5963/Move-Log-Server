@@ -35,8 +35,7 @@ public class RecordController {
     @Operation(summary = "오늘 기준 기록 현황 API", description = "오늘 기준 기록 확인하는 API입니다.")
     @GetMapping("/today")
     public ResponseEntity<ApiResponse> retrieveTodayRecord(
-            @Parameter(description = "User의 토큰을 입력해주세요.", required = true) @AuthenticationPrincipal UserPrincipal userPrincipal
-//            @Parameter(description = "Schemas의 CreateRecordReq를 참고해주세요.", required = true) @RequestPart CreateRecordReq createRecordReq,
+            @Parameter(description = "User의 토큰을 입력해주세요.", required = false) @AuthenticationPrincipal UserPrincipal userPrincipal
             ) {;
 
         ApiResponse result = ApiResponse.builder()
