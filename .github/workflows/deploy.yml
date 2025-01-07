@@ -1,0 +1,91 @@
+name: Deploy to Amazon EC2 with Docker
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: movelog
+  DOCKER_IMAGE_NAME: goldcong/movelog
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Docker Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # 소스 코드 체크아웃
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # JDK 17 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Gradle 캐싱
+      - name: Gradle Caching
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Gradle 빌드 (테스트 제외)
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+
+      # 설정 파일 생성
+      - name: Create configuration files
+        run: |
+          mkdir -p ./src/main/resources/chatgpt
+          echo "${{ secrets.APPLICATION_CHATGPT_YML }}" | base64 --decode > ./src/main/resources/chatgpt/application-chatgpt.yml
+          
+          mkdir -p ./src/main/resources/database
+          echo "${{ secrets.APPLICATION_DATABASE_YML }}" | base64 --decode > ./src/main/resources/database/application-database.yml
+          
+          mkdir -p ./src/main/resources/oauth2
+          echo "${{ secrets.APPLICATION_OAUTH2_YML }}" | base64 --decode > ./src/main/resources/oauth2/application-oauth2.yml
+          
+          mkdir -p ./src/main/resources/s3
+          echo "${{ secrets.APPLICATION_S3_YML }}" | base64 --decode > ./src/main/resources/s3/application-s3.yml
+          
+          mkdir -p ./src/main/resources/webclient
+          echo "${{ secrets.APPLICATION_WEBCLIENT_YML }}" | base64 --decode > ./src/main/resources/webclient/application-webclient.yml
+
+      # Docker 이미지 빌드
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE_NAME }} .
+
+      # AWS ECR에 로그인
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Docker 이미지를 ECR로 푸시
+      - name: Push Docker image to ECR
+        run: |
+          REPOSITORY_URI=$(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text)
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} $REPOSITORY_URI:${{ github.sha }}
+          docker push $REPOSITORY_URI:${{ github.sha }}
+
+      # EC2에서 컨테이너 실행
+      - name: Deploy Docker container on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          docker pull $(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text):${{ github.sha }}
+          docker stop ${{ env.DOCKER_IMAGE_NAME }} || true
+          docker rm ${{ env.DOCKER_IMAGE_NAME }} || true
+          docker run -d -p 8080:8080 --name ${{ env.DOCKER_IMAGE_NAME }} $(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text):${{ github.sha }}
+          EOF
