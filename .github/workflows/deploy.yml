@@ -7,8 +7,8 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: movelog
-  DOCKER_IMAGE_NAME: movelog-server
+  ECR_REPOSITORY: movelog-server
+  DOCKER_IMAGE_NAME: latest
 
 permissions:
   contents: read
