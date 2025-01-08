@@ -105,7 +105,7 @@ jobs:
       # EC2에서 컨테이너 실행
       - name: Deploy Docker container on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -t -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
           sudo docker pull $(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text):${{ github.sha }}
           sudo docker stop ${{ env.DOCKER_IMAGE_NAME }} || true
           sudo docker rm ${{ env.DOCKER_IMAGE_NAME }} || true
