@@ -88,12 +88,27 @@ jobs:
           docker tag ${{ env.DOCKER_IMAGE_NAME }} $REPOSITORY_URI:${{ github.sha }}
           docker push $REPOSITORY_URI:${{ github.sha }}
 
+      # SSH 키 추가
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+      # 디버깅: SSH 키 파일 확인
+      - name: Debug SSH key setup
+        run: |
+          ls -l ~/.ssh
+          cat ~/.ssh/id_rsa
+
       # EC2에서 컨테이너 실행
       - name: Deploy Docker container on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -T ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
           sudo docker pull $(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text):${{ github.sha }}
           sudo docker stop ${{ env.DOCKER_IMAGE_NAME }} || true
           sudo docker rm ${{ env.DOCKER_IMAGE_NAME }} || true
           sudo docker run -d -p 8080:8080 --name ${{ env.DOCKER_IMAGE_NAME }} $(aws ecr describe-repositories --repository-names ${{ env.ECR_REPOSITORY }} --query "repositories[0].repositoryUri" --output text):${{ github.sha }}
           EOF
+
