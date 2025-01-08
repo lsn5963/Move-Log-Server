@@ -88,23 +88,6 @@ jobs:
           docker tag ${{ env.DOCKER_IMAGE_NAME }} $REPOSITORY_URI:${{ github.sha }}
           docker push $REPOSITORY_URI:${{ github.sha }}
 
-      - name: Debug SSH key setup
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ls -l ~/.ssh  # 파일 존재 여부 및 권한 확인
-          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
-
-      # SSH 키 추가
-      - name: Add SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
-          echo "SSH Key Added Successfully."
-
       # EC2에서 컨테이너 실행
       - name: Deploy Docker container on EC2
         run: |
